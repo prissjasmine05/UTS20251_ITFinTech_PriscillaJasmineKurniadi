@@ -14,6 +14,9 @@ const ProductSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  description: {
+    type: String,
+  },
 });
 
 export default mongoose.models.Product || mongoose.model('Product', ProductSchema);
