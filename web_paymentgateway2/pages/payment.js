@@ -5,7 +5,6 @@ import { useState } from 'react';
 export default function PaymentPage() {
   const { cart } = useCart();
   const [isLoading, setIsLoading] = useState(false);
-  // State untuk menyimpan data customer dari form
   const [customer, setCustomer] = useState({
     name: '',
     email: '',
@@ -16,15 +15,12 @@ export default function PaymentPage() {
   const tax = subtotal * 0.11;
   const total = subtotal + tax;
 
-  // Fungsi untuk handle perubahan di input form
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setCustomer(prev => ({ ...prev, [name]: value }));
   };
 
-  // Fungsi final untuk handle pembayaran
   const handlePayment = async () => {
-    // Validasi sederhana, pastikan semua field diisi
     if (!customer.name || !customer.email || !customer.address) {
       alert('Harap isi semua informasi customer.');
       return;
@@ -35,7 +31,6 @@ export default function PaymentPage() {
       const response = await fetch('/api/payments', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        // Kirim data keranjang, total, dan customer ke backend
         body: JSON.stringify({ cart, total, customer }),
       });
       if (!response.ok) {
@@ -43,7 +38,7 @@ export default function PaymentPage() {
         throw new Error(errorData.error || 'Payment creation failed');
       }
       const { invoiceUrl } = await response.json();
-      window.location.href = invoiceUrl; // Redirect ke Xendit
+      window.location.href = invoiceUrl;
     } catch (error) {
       console.error('Payment error:', error);
       alert(`Gagal membuat link pembayaran: ${error.message}`);
@@ -52,43 +47,53 @@ export default function PaymentPage() {
   };
 
   return (
-    <div className="bg-gray-100 min-h-screen py-8">
+    <div className="bg-[#F5F5DD] min-h-screen font-sans text-zinc-800 py-8">
       <div className="container mx-auto p-4 max-w-2xl">
         <Link href="/checkout">
-            <button className="text-blue-500 mb-4">&larr; Back to Checkout</button>
+          <button className="text-zinc-600 hover:text-zinc-900 font-semibold mb-4">&larr; Kembali ke Keranjang</button>
         </Link>
-        <div className="bg-white p-6 rounded-lg shadow-md">
-            <h1 className="text-3xl font-bold mb-6 border-b pb-4">Secure Checkout</h1>
+        <div className="bg-white p-6 rounded-xl shadow-lg">
+          <h1 className="text-3xl font-bold mb-6 border-b border-zinc-200 pb-4">Detail Pembayaran</h1>
 
-            {/* Form Informasi Customer */}
-            <div className="mb-6">
-              <h2 className="text-xl font-semibold mb-2">Customer Information</h2>
-              <div className="space-y-3">
-                <input type="text" name="name" placeholder="Full Name" value={customer.name} onChange={handleInputChange} className="w-full p-2 border rounded-md" required />
-                <input type="email" name="email" placeholder="Email" value={customer.email} onChange={handleInputChange} className="w-full p-2 border rounded-md" required />
-                <textarea name="address" placeholder="Shipping Address" value={customer.address} onChange={handleInputChange} className="w-full p-2 border rounded-md" rows="3" required></textarea>
+          {/* Form Informasi Customer */}
+          <div className="mb-6">
+            <h2 className="text-xl font-semibold mb-3">Informasi Kontak</h2>
+            <div className="space-y-4">
+              <input type="text" name="name" placeholder="Nama Lengkap" value={customer.name} onChange={handleInputChange} className="w-full p-3 border border-zinc-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-zinc-500" required />
+              <input type="email" name="email" placeholder="Email" value={customer.email} onChange={handleInputChange} className="w-full p-3 border border-zinc-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-zinc-500" required />
+              <textarea name="address" placeholder="Alamat Pengiriman" value={customer.address} onChange={handleInputChange} className="w-full p-3 border border-zinc-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-zinc-500" rows="3" required></textarea>
+            </div>
+          </div>
+
+          {/* Rangkuman Biaya */}
+          <div>
+            <h2 className="text-xl font-semibold mb-3">Rangkuman Pesanan</h2>
+            <div className="space-y-2 text-lg border-t border-zinc-200 pt-4">
+              <div className="flex justify-between text-zinc-600">
+                <span>Subtotal</span>
+                <span>Rp {subtotal.toLocaleString('id-ID')}</span>
+              </div>
+              <div className="flex justify-between text-zinc-600">
+                <span>Pajak (11%)</span>
+                <span>Rp {tax.toLocaleString('id-ID')}</span>
+              </div>
+              <div className="flex justify-between font-bold text-xl pt-2 mt-2">
+                <span>Total Pembayaran</span>
+                <span>Rp {total.toLocaleString('id-ID')}</span>
               </div>
             </div>
+          </div>
 
-            {/* Order Summary */}
-            <div>
-                <h2 className="text-xl font-semibold mb-2">Order Summary</h2>
-                <div className="space-y-1 text-gray-700">
-                    <div className="flex justify-between"><span>Subtotal</span><span>Rp {subtotal.toLocaleString('id-ID')}</span></div>
-                    <div className="flex justify-between"><span>Tax (11%)</span><span>Rp {tax.toLocaleString('id-ID')}</span></div>
-                    <div className="flex justify-between font-bold text-lg text-black"><span>Total</span><span>Rp {total.toLocaleString('id-ID')}</span></div>
-                </div>
-            </div>
-
-            <button
-              onClick={handlePayment}
-              disabled={isLoading || cart.length === 0}
-              className="bg-black text-white w-full font-bold py-3 px-6 rounded-lg hover:bg-gray-800 mt-8 disabled:bg-gray-400 transition-colors"
-            >
-              {isLoading ? 'Processing...' : 'Confirm & Pay'}
-            </button>
+          <button
+            onClick={handlePayment}
+            disabled={isLoading || cart.length === 0}
+            className="w-full bg-zinc-800 text-white font-bold py-4 px-6 rounded-lg hover:bg-zinc-700 transition-colors mt-8 text-lg disabled:bg-zinc-400"
+          >
+            {isLoading ? 'Memproses...' : 'Konfirmasi & Bayar'}
+          </button>
         </div>
       </div>
     </div>
   );
 }
+
