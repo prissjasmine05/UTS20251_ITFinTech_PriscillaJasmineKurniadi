@@ -1,14 +1,15 @@
 import '../styles/globals.css';
-import { CartProvider } from '../context/CartContext';
+import AppWrapper from '../context/AppWrapper'; // Impor pembungkus baru
 
 // Ini adalah komponen "kulit" utama untuk semua halaman
 function MyApp({ Component, pageProps }) {
   return (
-    // CartProvider membungkus semua halaman agar keranjang bisa diakses di mana saja
-    <CartProvider>
+    // AppWrapper sekarang yang menangani semua logic provider
+    <AppWrapper>
       <Component {...pageProps} />
-    </CartProvider>
+    </AppWrapper>
   );
 }
 
 export default MyApp;
+
