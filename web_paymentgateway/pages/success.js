@@ -2,11 +2,9 @@ import Link from 'next/link';
 import { useCart } from '../context/CartContext';
 import { useEffect } from 'react';
 
-// Fungsi untuk mengosongkan keranjang
 function useClearCart() {
-  const { setCart } = useCart(); // Kita butuh fungsi 'setCart' dari context
+  const { setCart } = useCart(); 
   useEffect(() => {
-    // Saat halaman ini dimuat, langsung set keranjang menjadi array kosong
     if (setCart) {
       setCart([]);
     }
@@ -14,7 +12,6 @@ function useClearCart() {
 }
 
 export default function SuccessPage() {
-  // Panggil fungsi custom hook kita
   useClearCart();
 
   return (
