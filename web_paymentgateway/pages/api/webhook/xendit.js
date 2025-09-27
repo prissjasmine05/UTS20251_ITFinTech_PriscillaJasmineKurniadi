@@ -2,50 +2,52 @@ import Payment from '../../../models/Payment';
 import connectDB from '../../../lib/mongodb';
 
 export default async function handler(req, res) {
+  // Hanya izinkan metode POST
   if (req.method !== 'POST') {
     return res.status(405).json({ message: 'Method not allowed' });
   }
 
-  // Ambil token verifikasi dari header
-  const xenditWebhookToken = req.headers['x-callback-token'];
+  try {
+    console.log("Webhook received!"); // Log untuk debugging
 
-  // Verifikasi apakah notifikasi ini benar-benar dari Xendit
-  if (xenditWebhookToken !== process.env.XENDIT_CALLBACK_TOKEN) {
-    return res.status(401).json({ message: 'Unauthorized' });
-  }
+    // 1. Ambil token verifikasi dari header
+    const xenditWebhookToken = req.headers['x-callback-token'];
+    
+    // 2. Verifikasi apakah token cocok
+    if (xenditWebhookToken !== process.env.XENDIT_CALLBACK_TOKEN) {
+      console.error("Webhook Error: Invalid callback token");
+      return res.status(401).json({ message: 'Unauthorized' });
+    }
 
-  const { external_id, status } = req.body;
+    // 3. Ambil data penting dari body request
+    const { external_id, status } = req.body;
+    console.log(`Webhook data: external_id=${external_id}, status=${status}`);
 
-  // Jika statusnya PAID (LUNAS)
-  if (status === 'PAID') {
-    await connectDB();
-    try {
-      // Cari pembayaran di database kita berdasarkan external_id
+    // 4. Proses hanya jika statusnya PAID (LUNAS)
+    if (status === 'PAID') {
+      await connectDB();
+      
       const payment = await Payment.findOneAndUpdate(
-        { externalId: external_id },
-        { status: 'PAID' }, // Update statusnya menjadi PAID
-        { new: true }
+        { externalId: external_id }, // Cari pembayaran berdasarkan externalId
+        { status: 'PAID' },           // Update statusnya menjadi 'PAID'
+        { new: true }                  // Opsi untuk mengembalikan dokumen yang sudah di-update
       );
 
       if (!payment) {
-        console.log(`Webhook: Payment with external_id ${external_id} not found.`);
-        return res.status(404).json({ message: 'Payment not found' });
+        console.warn(`Webhook: Payment with external_id ${external_id} not found.`);
+        // Tetap kirim 200 OK agar Xendit tidak terus mengirim ulang
+        return res.status(200).json({ message: 'Payment not found, but webhook acknowledged.' });
       }
       
-      console.log(`Webhook: Payment ${external_id} successfully updated to PAID.`);
-
-    } catch (error) {
-      console.error('Webhook DB update error:', error);
-      return res.status(500).json({ message: 'Internal server error' });
+      console.log(`Webhook SUCCESS: Payment ${external_id} updated to PAID.`);
     }
+
+    // 5. Selalu kirim balasan 200 OK ke Xendit jika tidak ada error
+    res.status(200).json({ message: 'Webhook received successfully' });
+
+  } catch (error) {
+    console.error('Webhook processing error:', error);
+    res.status(500).json({ message: 'Internal server error' });
   }
-
-  // Kirim balasan sukses ke Xendit
-  res.status(200).json({ message: 'Webhook received successfully' });
 }
-```
 
-**Langkah 1.4: Tambahkan Token ke `.env.local`**
-Buka `.env.local` dan tambahkan baris baru untuk token rahasia webhook.
-```
-XENDIT_CALLBACK_TOKEN="INI_TOKEN_RAHASIA_KITA_NANTI"
