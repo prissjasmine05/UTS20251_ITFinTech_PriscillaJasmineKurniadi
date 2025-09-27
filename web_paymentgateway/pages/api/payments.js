@@ -2,8 +2,6 @@ import { Xendit } from 'xendit-node';
 import Payment from '../../models/Payment';
 import connectDB from '../../lib/mongodb';
 
-// Tentukan base URL secara dinamis
-// Jika di Vercel, gunakan URL dari Vercel. Jika tidak (lokal), gunakan localhost.
 const BASE_URL = process.env.NEXT_PUBLIC_VERCEL_URL || 'http://localhost:3000';
 
 const xenditClient = new Xendit({
@@ -14,7 +12,7 @@ export default async function handler(req, res) {
   if (req.method !== 'POST') {
     return res.status(405).json({ message: 'Method not allowed' });
   }
-  await connectDB(); // Pastikan koneksi DB dibuat di awal
+  await connectDB(); 
 
   try {
     const { cart, total, customer } = req.body;
@@ -36,7 +34,6 @@ export default async function handler(req, res) {
         email: customer.email,
         address: customer.address,
       },
-      // Gunakan BASE_URL yang sudah dinamis
       successRedirectUrl: `${BASE_URL}/success`,
       failureRedirectUrl: `${BASE_URL}/failure`,
     };

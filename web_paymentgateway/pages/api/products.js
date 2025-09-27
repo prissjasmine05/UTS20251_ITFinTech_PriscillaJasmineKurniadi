@@ -8,7 +8,7 @@ export default async function handler(req, res) {
   switch (method) {
     case 'GET':
       try {
-        const products = await Product.find({}); // Ambil semua produk
+        const products = await Product.find({}); 
         res.status(200).json({ success: true, data: products });
       } catch (error) {
         res.status(400).json({ success: false, error: error.message });
@@ -17,7 +17,7 @@ export default async function handler(req, res) {
 
     case 'POST':
       try {
-        const product = await Product.create(req.body); // Buat produk baru dari data yang dikirim
+        const product = await Product.create(req.body); 
         res.status(201).json({ success: true, data: product });
       } catch (error) {
         res.status(400).json({ success: false, error: error.message });

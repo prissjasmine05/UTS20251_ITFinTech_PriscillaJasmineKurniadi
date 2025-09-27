@@ -1,7 +1,7 @@
 import mongoose from 'mongoose';
 
 const PaymentSchema = new mongoose.Schema({
-  externalId: { // ID unik dari invoice Xendit
+  externalId: { 
     type: String,
     required: true,
     unique: true,
@@ -17,10 +17,10 @@ const PaymentSchema = new mongoose.Schema({
   status: {
     type: String,
     required: true,
-    enum: ['PENDING', 'PAID', 'FAILED'], // Status hanya bisa salah satu dari ini
+    enum: ['PENDING', 'PAID', 'FAILED'], 
     default: 'PENDING',
   },
-  cart: { // Simpan detail keranjang untuk arsip
+  cart: { 
     type: Array,
     required: true,
   }

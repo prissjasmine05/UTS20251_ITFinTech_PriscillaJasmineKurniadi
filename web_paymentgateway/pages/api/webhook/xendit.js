@@ -2,7 +2,6 @@ import Payment from '../../../models/Payment';
 import connectDB from '../../../lib/mongodb';
 
 export default async function handler(req, res) {
-  // Hanya izinkan metode POST
   if (req.method !== 'POST') {
     return res.status(405).json({ message: 'Method not allowed' });
   }
@@ -28,14 +27,13 @@ export default async function handler(req, res) {
       await connectDB();
       
       const payment = await Payment.findOneAndUpdate(
-        { externalId: external_id }, // Cari pembayaran berdasarkan externalId
-        { status: 'PAID' },           // Update statusnya menjadi 'PAID'
-        { new: true }                  // Opsi untuk mengembalikan dokumen yang sudah di-update
+        { externalId: external_id }, 
+        { status: 'PAID' },           
+        { new: true }              
       );
 
       if (!payment) {
         console.warn(`Webhook: Payment with external_id ${external_id} not found.`);
-        // Tetap kirim 200 OK agar Xendit tidak terus mengirim ulang
         return res.status(200).json({ message: 'Payment not found, but webhook acknowledged.' });
       }
       
