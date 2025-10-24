@@ -105,7 +105,7 @@ export default function Login() {
                   type="email"
                   value={formData.email}
                   onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                  className="w-full px-4 py-3 border-2 border-zinc-200 rounded-lg focus:ring-2 focus:ring-zinc-800 focus:border-transparent transition"
+                  className="w-full px-4 py-3 border-2 border-zinc-200 rounded-lg focus:ring-2 focus:ring-zinc-800 focus:border-transparent transition text-zinc-800 placeholder-zinc-400 autofill:bg-white autofill:text-zinc-800"
                   placeholder="john@example.com"
                   required
                 />
@@ -119,7 +119,7 @@ export default function Login() {
                   type="password"
                   value={formData.password}
                   onChange={(e) => setFormData({ ...formData, password: e.target.value })}
-                  className="w-full px-4 py-3 border-2 border-zinc-200 rounded-lg focus:ring-2 focus:ring-zinc-800 focus:border-transparent transition"
+                  className="w-full px-4 py-3 border-2 border-zinc-200 rounded-lg focus:ring-2 focus:ring-zinc-800 focus:border-transparent transition text-zinc-800 placeholder-zinc-400 autofill:bg-white autofill:text-zinc-800"
                   placeholder="Password"
                   required
                 />
@@ -164,7 +164,7 @@ export default function Login() {
                   maxLength={6}
                   value={formData.mfaCode}
                   onChange={(e) => setFormData({ ...formData, mfaCode: e.target.value })}
-                  className="w-full px-4 py-3 border-2 border-zinc-200 rounded-lg text-center text-2xl tracking-widest font-bold focus:ring-2 focus:ring-zinc-800 focus:border-transparent transition"
+                  className="w-full px-4 py-3 border-2 border-zinc-200 rounded-lg text-center text-2xl tracking-widest font-bold focus:ring-2 focus:ring-zinc-800 focus:border-transparent transition text-zinc-800 placeholder-zinc-400 autofill:bg-white autofill:text-zinc-800"
                   placeholder="000000"
                   required
                 />

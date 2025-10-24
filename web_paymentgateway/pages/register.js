@@ -93,8 +93,8 @@ export default function Register() {
               value={formData.name}
               onChange={handleChange}
               required
-              className="w-full px-4 py-3 border-2 border-zinc-200 rounded-lg focus:ring-2 focus:ring-zinc-800 focus:border-transparent transition"
-              placeholder="John Doe"
+              className="w-full px-4 py-3 border-2 border-zinc-200 rounded-lg focus:ring-2 focus:ring-zinc-800 focus:border-transparent transition text-zinc-800 placeholder-zinc-400 autofill:bg-white autofill:text-zinc-800"
+              placeholder="Priscilla J"
             />
           </div>
 
@@ -108,8 +108,8 @@ export default function Register() {
               value={formData.email}
               onChange={handleChange}
               required
-              className="w-full px-4 py-3 border-2 border-zinc-200 rounded-lg focus:ring-2 focus:ring-zinc-800 focus:border-transparent transition"
-              placeholder="john@example.com"
+              className="w-full px-4 py-3 border-2 border-zinc-200 rounded-lg focus:ring-2 focus:ring-zinc-800 focus:border-transparent transition text-zinc-800 placeholder-zinc-400 autofill:bg-white autofill:text-zinc-800"
+              placeholder="pris@example.com"
             />
           </div>
 
@@ -123,7 +123,7 @@ export default function Register() {
               value={formData.phone}
               onChange={handleChange}
               required
-              className="w-full px-4 py-3 border-2 border-zinc-200 rounded-lg focus:ring-2 focus:ring-zinc-800 focus:border-transparent transition"
+              className="w-full px-4 py-3 border-2 border-zinc-200 rounded-lg focus:ring-2 focus:ring-zinc-800 focus:border-transparent transition text-zinc-800 placeholder-zinc-400 autofill:bg-white autofill:text-zinc-800"
               placeholder="6281234567890 (dengan kode negara)"
             />
             <p className="text-xs text-zinc-500 mt-1">Format: 6281234567890 (tanpa +)</p>
@@ -140,7 +140,7 @@ export default function Register() {
               onChange={handleChange}
               required
               minLength={6}
-              className="w-full px-4 py-3 border-2 border-zinc-200 rounded-lg focus:ring-2 focus:ring-zinc-800 focus:border-transparent transition"
+              className="w-full px-4 py-3 border-2 border-zinc-200 rounded-lg focus:ring-2 focus:ring-zinc-800 focus:border-transparent transition text-zinc-800 placeholder-zinc-400 autofill:bg-white autofill:text-zinc-800"
               placeholder="Minimal 6 karakter"
             />
           </div>
@@ -155,7 +155,7 @@ export default function Register() {
               value={formData.confirmPassword}
               onChange={handleChange}
               required
-              className="w-full px-4 py-3 border-2 border-zinc-200 rounded-lg focus:ring-2 focus:ring-zinc-800 focus:border-transparent transition"
+              className="w-full px-4 py-3 border-2 border-zinc-200 rounded-lg focus:ring-2 focus:ring-zinc-800 focus:border-transparent transition text-zinc-800 placeholder-zinc-400 autofill:bg-white autofill:text-zinc-800"
               placeholder="Ketik ulang password"
             />
           </div>

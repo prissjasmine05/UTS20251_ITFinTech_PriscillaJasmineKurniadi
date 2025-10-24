@@ -20,12 +20,12 @@ const PaymentSchema = new mongoose.Schema({
   },
   phone: {
     type: String,
-    required: false, // Opsional karena user bisa checkout tanpa login
+    required: false, 
   },
   status: {
     type: String,
     required: true,
-    enum: ['PENDING', 'PAID', 'FAILED', 'EXPIRED'], // Tambah EXPIRED
+    enum: ['PENDING', 'PAID', 'FAILED', 'EXPIRED'], 
     default: 'PENDING',
   },
   cart: { 
@@ -43,8 +43,8 @@ const PaymentSchema = new mongoose.Schema({
   userId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User',
-    required: false, // Opsional karena bisa guest checkout
+    required: false, 
   },
-}, { timestamps: true }); // timestamps akan auto create createdAt & updatedAt
+}, { timestamps: true }); 
 
 export default mongoose.models.Payment || mongoose.model('Payment', PaymentSchema);

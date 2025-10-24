@@ -537,7 +537,7 @@ export default function AdminDashboard() {
           </div>
         )}
 
-        {/* ANALYTICS TAB - KEEP ALL ORIGINAL CODE, ONLY CHANGE COLORS */}
+        {/* ANALYTICS TAB */}
         {activeTab === 'analytics' && (
           <div className="space-y-6">
             {/* Top Summary Cards */}
@@ -761,7 +761,7 @@ export default function AdminDashboard() {
               </div>
             </div>
 
-            {/* Status & Top Products Section */}
+            {/* Status Section */}
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
               {/* Order Status */}
               <div className="bg-white rounded-xl shadow-md p-6">

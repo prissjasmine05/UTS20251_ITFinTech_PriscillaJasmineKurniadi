@@ -1,4 +1,3 @@
-// pages/api/admin/dashboard.js
 import connectDB from '../../../lib/mongodb';
 import Payment from '../../../models/Payment';
 import Product from '../../../models/Product';

@@ -1,11 +1,9 @@
-// components/LoginChooser.js
 import { useRouter } from 'next/router';
 import { useEffect } from 'react';
 
 export default function LoginChooser({ show, onClose }) {
   const router = useRouter();
 
-  // Close on ESC key
   useEffect(() => {
     const handleEsc = (e) => {
       if (e.key === 'Escape') onClose();

@@ -12,12 +12,12 @@ export default async function handler(req, res) {
 
     const { name, email, phone, password } = req.body || {};
 
-    // 🧩 Validasi input
+    // Validasi input
     if (!name || !email || !phone || !password) {
       return res.status(400).json({ message: 'Semua field wajib diisi' });
     }
 
-    // 🔎 Cek apakah email atau nomor telepon sudah terdaftar
+    // Cek apakah email atau nomor telepon sudah terdaftar
     const existingUser = await User.findOne({
       $or: [{ email: email.toLowerCase() }, { phone }],
     });
@@ -25,11 +25,11 @@ export default async function handler(req, res) {
       return res.status(409).json({ message: 'User dengan email atau nomor tersebut sudah ada' });
     }
 
-    // 🔐 Hash password
+    // Hash password
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
 
-    // ☎️ Normalisasi nomor HP ke format internasional (628xx)
+    // (628xx)
     let normalizedPhone = phone.replace(/[^\d]/g, '');
     if (normalizedPhone.startsWith('0')) {
       normalizedPhone = '62' + normalizedPhone.slice(1);
@@ -37,7 +37,7 @@ export default async function handler(req, res) {
       normalizedPhone = '62' + normalizedPhone;
     }
 
-    // 💾 Simpan user ke MongoDB
+    // Simpan user ke MongoDB
     const newUser = await User.create({
       name,
       email: email.toLowerCase(),

@@ -62,13 +62,14 @@ export default function AdminLogin() {
               Username
             </label>
             <input
-              type="text"
-              value={formData.username}
-              onChange={(e) => setFormData({ ...formData, username: e.target.value })}
-              className="w-full px-4 py-3 border-2 border-zinc-200 rounded-lg focus:ring-2 focus:ring-zinc-800 focus:border-transparent transition"
-              placeholder="admin"
-              required
-            />
+  type="text"
+  value={formData.username}
+  onChange={(e) => setFormData({ ...formData, username: e.target.value })}
+  className="w-full px-4 py-3 border-2 border-zinc-200 rounded-lg focus:ring-2 focus:ring-zinc-800 focus:border-transparent transition text-zinc-800 placeholder-zinc-400"
+  placeholder="admin"
+  required
+/>
+
           </div>
 
           <div>
@@ -76,13 +77,14 @@ export default function AdminLogin() {
               Password
             </label>
             <input
-              type="password"
-              value={formData.password}
-              onChange={(e) => setFormData({ ...formData, password: e.target.value })}
-              className="w-full px-4 py-3 border-2 border-zinc-200 rounded-lg focus:ring-2 focus:ring-zinc-800 focus:border-transparent transition"
-              placeholder="••••••••"
-              required
-            />
+  type="password"
+  value={formData.password}
+  onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+  className="w-full px-4 py-3 border-2 border-zinc-200 rounded-lg focus:ring-2 focus:ring-zinc-800 focus:border-transparent transition text-zinc-800 placeholder-zinc-400"
+  placeholder="••••••••"
+  required
+/>
+
           </div>
 
           <button

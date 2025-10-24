@@ -1,4 +1,3 @@
-// components/ProfileIcon.js
 import { useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/router';
 import LoginChooser from './LoginChooser';
@@ -12,7 +11,7 @@ export default function ProfileIcon() {
   const menuRef = useRef(null);
 
   useEffect(() => {
-    // Cek status login di client
+    // Cek status login
     try {
       const user = localStorage.getItem('user');
       const admin = localStorage.getItem('admin');

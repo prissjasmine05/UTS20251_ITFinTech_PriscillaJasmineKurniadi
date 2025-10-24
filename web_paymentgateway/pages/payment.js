@@ -25,7 +25,6 @@ export default function PaymentPage() {
         setCustomer((prev) => ({ ...prev, ...parsed }));
       }
     } catch (e) {
-      // ignore
     }
   }, []);
 
@@ -34,11 +33,9 @@ export default function PaymentPage() {
     try {
       localStorage.setItem('payment_customer', JSON.stringify(customer));
     } catch (e) {
-      // ignore
     }
   }, [customer]);
 
-  // Hitung total menggunakan useMemo (lebih efisien)
   const subtotal = useMemo(
     () => cart.reduce((sum, item) => sum + (item.price || 0) * (item.quantity || 0), 0),
     [cart]
@@ -53,7 +50,7 @@ export default function PaymentPage() {
     setCustomer((prev) => ({ ...prev, [name]: value }));
   };
 
-  // Normalisasi nomor WA ke format internasional Indonesia: 62xxxxxxxxxx
+  // 62xxxxxxxxxx
   const normalizePhone = (raw) => {
     if (!raw) return '';
     let v = raw.replace(/[^\d+]/g, ''); // keep digits & plus
