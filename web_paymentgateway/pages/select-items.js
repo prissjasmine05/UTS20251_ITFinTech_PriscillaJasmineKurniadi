@@ -1,6 +1,8 @@
 import Link from 'next/link';
 import { useCart } from '../context/CartContext';
 import { useState } from 'react';
+import ProfileIcon from '../components/ProfileIcon';
+import LoginChooser from '../components/LoginChooser';
 
 const categories = ['All', 'Drinks', 'Snacks', 'Bundles'];
 
@@ -8,6 +10,7 @@ export default function SelectItemsPage({ products }) {
   const { cart, addToCart, removeFromCart, getItemQuantity } = useCart();
   const [selectedCategory, setSelectedCategory] = useState('All');
   const [searchTerm, setSearchTerm] = useState('');
+  const [showLoginChooser, setShowLoginChooser] = useState(false);
 
   const filteredProducts = products
     .filter(product => {
@@ -18,11 +21,31 @@ export default function SelectItemsPage({ products }) {
       product.name.toLowerCase().includes(searchTerm.toLowerCase())
     );
 
+  // Check if user is logged in
+  const checkAuth = () => {
+    if (typeof window === 'undefined') return false;
+    const user = localStorage.getItem('user');
+    const admin = localStorage.getItem('admin');
+    return !!(user || admin);
+  };
+
+  // Handle Add to Cart with auth check
+  const handleAddToCart = (product) => {
+    if (!checkAuth()) {
+      setShowLoginChooser(true);
+      return;
+    }
+    addToCart(product);
+  };
+
   return (
     <div className="bg-[#F5F5DD] min-h-screen font-sans text-zinc-800">
       {/* Header */}
       <header className="bg-white/80 backdrop-blur-md shadow-sm p-4 flex justify-between items-center sticky top-0 z-10 border-b border-zinc-200">
-        <h1 className="text-2xl font-bold text-zinc-800">PrisJ Cafe ☕</h1>
+        <div className="flex items-center gap-4">
+          <ProfileIcon />
+          <h1 className="text-2xl font-bold text-zinc-800">PrisJ Cafe ☕</h1>
+        </div>
         
         {/* Grup untuk Search Bar dan Keranjang */}
         <div className="flex items-center gap-4">
@@ -89,16 +112,26 @@ export default function SelectItemsPage({ products }) {
                   <div className="mt-auto flex justify-end">
                     {quantityInCart === 0 ? (
                       <button 
-                        onClick={() => addToCart(product)}
-                        className="bg-zinc-200 text-zinc-800 font-bold py-2 px-5 rounded-full hover:bg-zinc-300 transition-colors"
+                        onClick={() => handleAddToCart(product)}
+                        className="bg-zinc-200 text-zinc-800 font-bold py-2 px-5 rounded-full hover:bg-zinc-300 transition-colors focus:outline-none focus:ring-2 focus:ring-zinc-500"
                       >
                         Add
                       </button>
                     ) : (
                       <div className="flex items-center gap-3 bg-zinc-800 text-white rounded-full px-3 py-1.5 shadow-md">
-                        <button onClick={() => removeFromCart(product)} className="font-bold text-lg">➖</button>
+                        <button 
+                          onClick={() => removeFromCart(product)} 
+                          className="font-bold text-lg focus:outline-none focus:ring-2 focus:ring-white rounded"
+                        >
+                          ➖
+                        </button>
                         <span className="font-bold text-lg w-5 text-center">{quantityInCart}</span>
-                        <button onClick={() => addToCart(product)} className="font-bold text-lg">➕</button>
+                        <button 
+                          onClick={() => addToCart(product)} 
+                          className="font-bold text-lg focus:outline-none focus:ring-2 focus:ring-white rounded"
+                        >
+                          ➕
+                        </button>
                       </div>
                     )}
                   </div>
@@ -108,6 +141,12 @@ export default function SelectItemsPage({ products }) {
           })}
         </div>
       </main>
+
+      {/* Login Chooser Modal */}
+      <LoginChooser 
+        show={showLoginChooser} 
+        onClose={() => setShowLoginChooser(false)} 
+      />
     </div>
   );
 }
@@ -122,4 +161,3 @@ export async function getServerSideProps() {
     return { props: { products: [] } };
   }
 }
-

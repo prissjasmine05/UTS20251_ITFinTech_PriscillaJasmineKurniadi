@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 
 export default function AdminDashboard() {
-const [filterStatus, setFilterStatus] = useState('All');
+  const [filterStatus, setFilterStatus] = useState('All');
   const [dateRange, setDateRange] = useState({ start: '', end: '' });
   const router = useRouter();
   const [data, setData] = useState(null);
@@ -38,9 +38,9 @@ const [filterStatus, setFilterStatus] = useState('All');
   const fetchProducts = async () => {
     setLoadingProducts(true);
     try {
-        const response = await fetch('/api/products');
+      const response = await fetch('/api/products');
       const result = await response.json();
-      console.log('Admin /products result:', result); // <— debug
+      console.log('Admin /products result:', result);
       if (response.ok && result.success) setProducts(result.data || []);
       else setProducts([]);
     } catch (error) {
@@ -59,7 +59,7 @@ const [filterStatus, setFilterStatus] = useState('All');
         ? { id: editingProduct._id, ...newProduct, price: parseFloat(newProduct.price) }
         : { ...newProduct, price: parseFloat(newProduct.price) };
 
-        const response = await fetch('/api/products', {
+      const response = await fetch('/api/products', {
         method,
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(body),
@@ -99,7 +99,7 @@ const [filterStatus, setFilterStatus] = useState('All');
     if (!confirm('Yakin ingin menghapus product ini?')) return;
 
     try {
-        const response = await fetch(`/api/products?id=${id}`, {
+      const response = await fetch(`/api/products?id=${id}`, {
         method: 'DELETE',
       });
 
@@ -142,21 +142,21 @@ const [filterStatus, setFilterStatus] = useState('All');
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-xl">Loading...</div>
+      <div className="min-h-screen bg-[#F5F5DD] flex items-center justify-center">
+        <div className="text-xl font-bold text-zinc-800">Loading...</div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      {/* Header */}
-      <div className="bg-white shadow-sm border-b">
+    <div className="min-h-screen bg-[#F5F5DD]">
+      {/* Header - Matching homepage style */}
+      <div className="bg-white/80 backdrop-blur-md shadow-sm border-b border-zinc-200 sticky top-0 z-10">
         <div className="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
-          <h1 className="text-3xl font-bold text-gray-800">Dashboard Ecommerce</h1>
+          <h1 className="text-2xl font-bold text-zinc-800">PrisJ Cafe Admin Dashboard ☕</h1>
           <button
             onClick={handleLogout}
-            className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition"
+            className="px-5 py-2 bg-red-600 text-white rounded-full font-semibold hover:bg-red-700 transition-colors shadow-md"
           >
             Logout
           </button>
@@ -164,34 +164,34 @@ const [filterStatus, setFilterStatus] = useState('All');
       </div>
 
       <div className="max-w-7xl mx-auto px-4 py-8">
-        {/* Tabs */}
-        <div className="flex space-x-4 mb-6">
+        {/* Tabs - Matching homepage button style */}
+        <div className="flex justify-center space-x-4 mb-8">
           <button
             onClick={() => setActiveTab('checkout')}
-            className={`px-6 py-3 rounded-lg font-semibold transition ${
+            className={`px-6 py-3 rounded-full font-semibold transition-colors shadow-md ${
               activeTab === 'checkout'
-                ? 'bg-blue-600 text-white'
-                : 'bg-white text-gray-700 hover:bg-gray-100'
+                ? 'bg-zinc-800 text-white'
+                : 'bg-white text-zinc-600 hover:bg-zinc-100 border border-zinc-200'
             }`}
           >
             Checkout
           </button>
           <button
             onClick={() => setActiveTab('products')}
-            className={`px-6 py-3 rounded-lg font-semibold transition ${
+            className={`px-6 py-3 rounded-full font-semibold transition-colors shadow-md ${
               activeTab === 'products'
-                ? 'bg-blue-600 text-white'
-                : 'bg-white text-gray-700 hover:bg-gray-100'
+                ? 'bg-zinc-800 text-white'
+                : 'bg-white text-zinc-600 hover:bg-zinc-100 border border-zinc-200'
             }`}
           >
             Products
           </button>
           <button
             onClick={() => setActiveTab('analytics')}
-            className={`px-6 py-3 rounded-lg font-semibold transition ${
+            className={`px-6 py-3 rounded-full font-semibold transition-colors shadow-md ${
               activeTab === 'analytics'
-                ? 'bg-blue-600 text-white'
-                : 'bg-white text-gray-700 hover:bg-gray-100'
+                ? 'bg-zinc-800 text-white'
+                : 'bg-white text-zinc-600 hover:bg-zinc-100 border border-zinc-200'
             }`}
           >
             Analytics
@@ -201,11 +201,11 @@ const [filterStatus, setFilterStatus] = useState('All');
         {/* CHECKOUT TAB */}
         {activeTab === 'checkout' && (
           <div className="bg-white rounded-xl shadow-lg overflow-hidden">
-            <div className="p-6 border-b bg-gradient-to-r from-blue-50 to-indigo-50">
+            <div className="p-6 border-b bg-zinc-50">
               <div className="flex justify-between items-center mb-4">
                 <div>
-                  <h2 className="text-2xl font-bold text-gray-800">📦 Checkout List</h2>
-                  <p className="text-sm text-gray-600 mt-1">Daftar semua transaksi checkout</p>
+                  <h2 className="text-2xl font-bold text-zinc-800">📦 Checkout List</h2>
+                  <p className="text-sm text-zinc-600 mt-1">Daftar semua transaksi checkout</p>
                 </div>
               </div>
 
@@ -213,11 +213,11 @@ const [filterStatus, setFilterStatus] = useState('All');
               <div className="flex flex-wrap gap-4 items-end">
                 {/* Status Filter */}
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Filter Status</label>
+                  <label className="block text-sm font-medium text-zinc-700 mb-2">Filter Status</label>
                   <select
                     value={filterStatus}
                     onChange={(e) => setFilterStatus(e.target.value)}
-                    className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className="px-4 py-2 border-2 border-zinc-200 rounded-lg focus:ring-2 focus:ring-zinc-800 focus:border-transparent"
                   >
                     <option value="All">All Status</option>
                     <option value="PAID">PAID</option>
@@ -229,22 +229,22 @@ const [filterStatus, setFilterStatus] = useState('All');
 
                 {/* Date Range Filter */}
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Start Date</label>
+                  <label className="block text-sm font-medium text-zinc-700 mb-2">Start Date</label>
                   <input
                     type="date"
                     value={dateRange.start}
                     onChange={(e) => setDateRange({ ...dateRange, start: e.target.value })}
-                    className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className="px-4 py-2 border-2 border-zinc-200 rounded-lg focus:ring-2 focus:ring-zinc-800 focus:border-transparent"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">End Date</label>
+                  <label className="block text-sm font-medium text-zinc-700 mb-2">End Date</label>
                   <input
                     type="date"
                     value={dateRange.end}
                     onChange={(e) => setDateRange({ ...dateRange, end: e.target.value })}
-                    className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className="px-4 py-2 border-2 border-zinc-200 rounded-lg focus:ring-2 focus:ring-zinc-800 focus:border-transparent"
                   />
                 </div>
 
@@ -255,7 +255,7 @@ const [filterStatus, setFilterStatus] = useState('All');
                       setFilterStatus('All');
                       setDateRange({ start: '', end: '' });
                     }}
-                    className="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition"
+                    className="px-4 py-2 bg-zinc-200 text-zinc-700 rounded-lg hover:bg-zinc-300 transition font-medium"
                   >
                     Reset Filters
                   </button>
@@ -265,16 +265,16 @@ const [filterStatus, setFilterStatus] = useState('All');
 
             <div className="overflow-x-auto">
               <table className="w-full">
-                <thead className="bg-gray-50 border-b-2 border-gray-200">
+                <thead className="bg-zinc-100 border-b-2 border-zinc-200">
                   <tr>
-                    <th className="text-left py-4 px-6 text-xs font-bold text-gray-700 uppercase tracking-wider">Order ID</th>
-                    <th className="text-left py-4 px-6 text-xs font-bold text-gray-700 uppercase tracking-wider">Customer</th>
-                    <th className="text-left py-4 px-6 text-xs font-bold text-gray-700 uppercase tracking-wider">Amount</th>
-                    <th className="text-left py-4 px-6 text-xs font-bold text-gray-700 uppercase tracking-wider">Status</th>
-                    <th className="text-left py-4 px-6 text-xs font-bold text-gray-700 uppercase tracking-wider">Date</th>
+                    <th className="text-left py-4 px-6 text-xs font-bold text-zinc-700 uppercase tracking-wider">Order ID</th>
+                    <th className="text-left py-4 px-6 text-xs font-bold text-zinc-700 uppercase tracking-wider">Customer</th>
+                    <th className="text-left py-4 px-6 text-xs font-bold text-zinc-700 uppercase tracking-wider">Amount</th>
+                    <th className="text-left py-4 px-6 text-xs font-bold text-zinc-700 uppercase tracking-wider">Status</th>
+                    <th className="text-left py-4 px-6 text-xs font-bold text-zinc-700 uppercase tracking-wider">Date</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-gray-100">
+                <tbody className="divide-y divide-zinc-100">
                   {data?.payments
                     ?.filter((payment) => {
                       // Filter by status
@@ -293,20 +293,20 @@ const [filterStatus, setFilterStatus] = useState('All');
                       return true;
                     })
                     .map((payment, index) => (
-                      <tr key={payment._id} className={`hover:bg-blue-50 transition ${index % 2 === 0 ? 'bg-white' : 'bg-gray-50'}`}>
+                      <tr key={payment._id} className={`hover:bg-zinc-50 transition ${index % 2 === 0 ? 'bg-white' : 'bg-zinc-50/50'}`}>
                         <td className="py-4 px-6">
-                          <span className="font-mono text-sm font-medium text-gray-900">{payment.externalId}</span>
+                          <span className="font-mono text-sm font-medium text-zinc-900">{payment.externalId}</span>
                         </td>
                         <td className="py-4 px-6">
                           <div className="flex items-center">
-                            <div className="w-8 h-8 bg-gradient-to-br from-blue-400 to-blue-600 rounded-full flex items-center justify-center text-white font-bold text-xs mr-3">
+                            <div className="w-8 h-8 bg-gradient-to-br from-zinc-400 to-zinc-600 rounded-full flex items-center justify-center text-white font-bold text-xs mr-3">
                               {payment.payerEmail.charAt(0).toUpperCase()}
                             </div>
-                            <span className="text-sm text-gray-900">{payment.payerEmail}</span>
+                            <span className="text-sm text-zinc-900">{payment.payerEmail}</span>
                           </div>
                         </td>
                         <td className="py-4 px-6">
-                          <span className="text-base font-bold text-gray-900">
+                          <span className="text-base font-bold text-zinc-900">
                             Rp {payment.amount.toLocaleString('id-ID')}
                           </span>
                         </td>
@@ -326,7 +326,7 @@ const [filterStatus, setFilterStatus] = useState('All');
                             {payment.status}
                           </span>
                         </td>
-                        <td className="py-4 px-6 text-sm text-gray-600">
+                        <td className="py-4 px-6 text-sm text-zinc-600">
                           {new Date(payment.createdAt).toLocaleDateString('id-ID', {
                             day: 'numeric',
                             month: 'short',
@@ -340,8 +340,8 @@ const [filterStatus, setFilterStatus] = useState('All');
             </div>
             
             {/* Footer Summary */}
-            <div className="p-4 bg-gray-50 border-t flex justify-between items-center">
-              <span className="text-sm text-gray-600">
+            <div className="p-4 bg-zinc-50 border-t flex justify-between items-center">
+              <span className="text-sm text-zinc-600">
                 Showing {data?.payments?.filter((payment) => {
                   if (filterStatus !== 'All' && payment.status !== filterStatus) return false;
                   if (dateRange.start || dateRange.end) {
@@ -363,8 +363,8 @@ const [filterStatus, setFilterStatus] = useState('All');
           <div className="min-h-screen">
             <div className="flex justify-between items-center mb-8">
               <div>
-                <h2 className="text-3xl font-bold text-gray-800">Products Management</h2>
-                <p className="text-gray-600 mt-1">Kelola semua produk di toko Anda</p>
+                <h2 className="text-3xl font-bold text-zinc-800">Products Management</h2>
+                <p className="text-zinc-600 mt-1">Kelola semua produk di toko Anda</p>
               </div>
               <button
                 onClick={() => {
@@ -387,7 +387,7 @@ const [filterStatus, setFilterStatus] = useState('All');
                 <form onSubmit={handleAddProduct} className="space-y-6">
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
-                      <label className="block text-sm font-bold text-gray-700 mb-2">
+                      <label className="block text-sm font-bold text-zinc-700 mb-2">
                         Product Name *
                       </label>
                       <input
@@ -395,12 +395,12 @@ const [filterStatus, setFilterStatus] = useState('All');
                         placeholder="Ex: Es Kopi Susu"
                         value={newProduct.name}
                         onChange={(e) => setNewProduct({ ...newProduct, name: e.target.value })}
-                        className="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:ring-2 focus:ring-zinc-800 focus:border-transparent transition"
+                        className="w-full px-4 py-3 border-2 border-zinc-200 rounded-lg focus:ring-2 focus:ring-zinc-800 focus:border-transparent transition"
                         required
                       />
                     </div>
                     <div>
-                      <label className="block text-sm font-bold text-gray-700 mb-2">
+                      <label className="block text-sm font-bold text-zinc-700 mb-2">
                         Price (Rp) *
                       </label>
                       <input
@@ -408,18 +408,18 @@ const [filterStatus, setFilterStatus] = useState('All');
                         placeholder="22000"
                         value={newProduct.price}
                         onChange={(e) => setNewProduct({ ...newProduct, price: e.target.value })}
-                        className="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:ring-2 focus:ring-zinc-800 focus:border-transparent transition"
+                        className="w-full px-4 py-3 border-2 border-zinc-200 rounded-lg focus:ring-2 focus:ring-zinc-800 focus:border-transparent transition"
                         required
                       />
                     </div>
                     <div>
-                      <label className="block text-sm font-bold text-gray-700 mb-2">
+                      <label className="block text-sm font-bold text-zinc-700 mb-2">
                         Category *
                       </label>
                       <select
                         value={newProduct.category}
                         onChange={(e) => setNewProduct({ ...newProduct, category: e.target.value })}
-                        className="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:ring-2 focus:ring-zinc-800 focus:border-transparent transition"
+                        className="w-full px-4 py-3 border-2 border-zinc-200 rounded-lg focus:ring-2 focus:ring-zinc-800 focus:border-transparent transition"
                         required
                       >
                         <option value="Drinks">☕ Drinks</option>
@@ -429,7 +429,7 @@ const [filterStatus, setFilterStatus] = useState('All');
                       </select>
                     </div>
                     <div>
-                      <label className="block text-sm font-bold text-gray-700 mb-2">
+                      <label className="block text-sm font-bold text-zinc-700 mb-2">
                         Image URL
                       </label>
                       <input
@@ -437,19 +437,19 @@ const [filterStatus, setFilterStatus] = useState('All');
                         placeholder="https://example.com/image.jpg"
                         value={newProduct.imageUrl}
                         onChange={(e) => setNewProduct({ ...newProduct, imageUrl: e.target.value })}
-                        className="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:ring-2 focus:ring-zinc-800 focus:border-transparent transition"
+                        className="w-full px-4 py-3 border-2 border-zinc-200 rounded-lg focus:ring-2 focus:ring-zinc-800 focus:border-transparent transition"
                       />
                     </div>
                   </div>
                   <div>
-                    <label className="block text-sm font-bold text-gray-700 mb-2">
+                    <label className="block text-sm font-bold text-zinc-700 mb-2">
                       Description *
                     </label>
                     <textarea
                       placeholder="Perpaduan kopi, susu, dan gula aren..."
                       value={newProduct.description}
                       onChange={(e) => setNewProduct({ ...newProduct, description: e.target.value })}
-                      className="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:ring-2 focus:ring-zinc-800 focus:border-transparent transition"
+                      className="w-full px-4 py-3 border-2 border-zinc-200 rounded-lg focus:ring-2 focus:ring-zinc-800 focus:border-transparent transition"
                       rows="3"
                       required
                     />
@@ -468,14 +468,14 @@ const [filterStatus, setFilterStatus] = useState('All');
             {loadingProducts ? (
               <div className="text-center py-20">
                 <div className="inline-block animate-spin rounded-full h-16 w-16 border-b-4 border-zinc-800"></div>
-                <p className="mt-4 text-gray-600 font-medium">Loading products...</p>
+                <p className="mt-4 text-zinc-600 font-medium">Loading products...</p>
               </div>
             ) : products.length > 0 ? (
               <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
                 {products.map((product) => (
                   <div key={product._id} className="bg-white rounded-xl shadow-lg overflow-hidden flex transform hover:-translate-y-1 transition-transform duration-300">
                     {/* Product Image - 1/3 width */}
-                    <div className="w-1/3 flex-shrink-0">
+                    <div className="w-1/3 flex-shrink-0 relative">
                       <img 
                         src={product.imageUrl || `https://placehold.co/400x400/F5F5DD/4E443A?text=No+Image`} 
                         alt={product.name} 
@@ -504,7 +504,7 @@ const [filterStatus, setFilterStatus] = useState('All');
                       <div className="mt-auto flex gap-2">
                         <button
                           onClick={() => handleEditProduct(product)}
-                          className="flex-1 bg-blue-600 text-white font-bold py-2 px-4 rounded-full hover:bg-blue-700 transition-colors shadow-md"
+                          className="flex-1 bg-zinc-700 text-white font-bold py-2 px-4 rounded-full hover:bg-zinc-600 transition-colors shadow-md"
                         >
                           Edit
                         </button>
@@ -521,11 +521,11 @@ const [filterStatus, setFilterStatus] = useState('All');
               </div>
             ) : (
               <div className="bg-white rounded-xl shadow-lg p-16 text-center">
-                <svg className="w-32 h-32 mx-auto text-gray-300 mb-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg className="w-32 h-32 mx-auto text-zinc-300 mb-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4" />
                 </svg>
-                <p className="text-gray-500 text-2xl font-bold mb-2">No products yet</p>
-                <p className="text-gray-400 mb-6">Start by adding your first product to the store</p>
+                <p className="text-zinc-500 text-2xl font-bold mb-2">No products yet</p>
+                <p className="text-zinc-400 mb-6">Start by adding your first product to the store</p>
                 <button
                   onClick={() => setShowAddProduct(true)}
                   className="px-8 py-3 bg-zinc-800 text-white rounded-full font-bold hover:bg-zinc-700 transition"
@@ -537,35 +537,35 @@ const [filterStatus, setFilterStatus] = useState('All');
           </div>
         )}
 
-        {/* ANALYTICS TAB */}
+        {/* ANALYTICS TAB - KEEP ALL ORIGINAL CODE, ONLY CHANGE COLORS */}
         {activeTab === 'analytics' && (
           <div className="space-y-6">
-            {/* Top Summary Cards - Style Modern */}
+            {/* Top Summary Cards */}
             <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-              <div className="bg-white rounded-2xl shadow-md p-6 border-l-4 border-blue-500 hover:shadow-lg transition">
+              <div className="bg-white rounded-xl shadow-md p-6 border-l-4 border-zinc-800 hover:shadow-lg transition">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-sm text-gray-500 font-medium mb-1">Total Revenue</p>
-                    <h3 className="text-2xl font-bold text-gray-900">
+                    <p className="text-sm text-zinc-500 font-medium mb-1">Total Revenue</p>
+                    <h3 className="text-2xl font-bold text-zinc-900">
                       Rp {(data?.analytics?.totalRevenue || 0).toLocaleString('id-ID')}
                     </h3>
                     <p className="text-xs text-green-600 font-semibold mt-1">
                       ↑ {data?.analytics?.totalOrders || 0} transaksi
                     </p>
                   </div>
-                  <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center">
-                    <svg className="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <div className="w-12 h-12 bg-zinc-100 rounded-full flex items-center justify-center">
+                    <svg className="w-6 h-6 text-zinc-800" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                     </svg>
                   </div>
                 </div>
               </div>
 
-              <div className="bg-white rounded-2xl shadow-md p-6 border-l-4 border-green-500 hover:shadow-lg transition">
+              <div className="bg-white rounded-xl shadow-md p-6 border-l-4 border-green-500 hover:shadow-lg transition">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-sm text-gray-500 font-medium mb-1">Transaksi Sukses</p>
-                    <h3 className="text-2xl font-bold text-gray-900">
+                    <p className="text-sm text-zinc-500 font-medium mb-1">Transaksi Sukses</p>
+                    <h3 className="text-2xl font-bold text-zinc-900">
                       {data?.analytics?.totalOrders || 0}
                     </h3>
                     <p className="text-xs text-green-600 font-semibold mt-1">
@@ -580,11 +580,11 @@ const [filterStatus, setFilterStatus] = useState('All');
                 </div>
               </div>
 
-              <div className="bg-white rounded-2xl shadow-md p-6 border-l-4 border-purple-500 hover:shadow-lg transition">
+              <div className="bg-white rounded-xl shadow-md p-6 border-l-4 border-purple-500 hover:shadow-lg transition">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-sm text-gray-500 font-medium mb-1">Rata-rata Order</p>
-                    <h3 className="text-2xl font-bold text-gray-900">
+                    <p className="text-sm text-zinc-500 font-medium mb-1">Rata-rata Order</p>
+                    <h3 className="text-2xl font-bold text-zinc-900">
                       Rp {data?.analytics?.totalOrders > 0 
                         ? Math.round(data.analytics.totalRevenue / data.analytics.totalOrders).toLocaleString('id-ID')
                         : 0
@@ -602,11 +602,11 @@ const [filterStatus, setFilterStatus] = useState('All');
                 </div>
               </div>
 
-              <div className="bg-white rounded-2xl shadow-md p-6 border-l-4 border-orange-500 hover:shadow-lg transition">
+              <div className="bg-white rounded-xl shadow-md p-6 border-l-4 border-orange-500 hover:shadow-lg transition">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-sm text-gray-500 font-medium mb-1">Conversion Rate</p>
-                    <h3 className="text-2xl font-bold text-gray-900">
+                    <p className="text-sm text-zinc-500 font-medium mb-1">Conversion Rate</p>
+                    <h3 className="text-2xl font-bold text-zinc-900">
                       {data?.payments?.length > 0
                         ? ((data.analytics.totalOrders / data.payments.length) * 100).toFixed(1)
                         : 0
@@ -628,10 +628,10 @@ const [filterStatus, setFilterStatus] = useState('All');
             {/* Main Charts Section */}
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
               {/* Daily Revenue Chart - Bar Style */}
-              <div className="bg-white rounded-2xl shadow-md p-6">
+              <div className="bg-white rounded-xl shadow-md p-6">
                 <div className="mb-6">
-                  <h3 className="text-lg font-bold text-gray-800">Omset Harian</h3>
-                  <p className="text-sm text-gray-500">30 hari terakhir (hanya hari dengan transaksi)</p>
+                  <h3 className="text-lg font-bold text-zinc-800">Omset Harian</h3>
+                  <p className="text-sm text-zinc-500">30 hari terakhir (hanya hari dengan transaksi)</p>
                 </div>
 
                 {data?.analytics?.dailyRevenue && data.analytics.dailyRevenue.filter(d => d.total > 0).length > 0 ? (
@@ -647,10 +647,10 @@ const [filterStatus, setFilterStatus] = useState('All');
                             <div key={day._id} className="flex-1 flex flex-col items-center group relative">
                               {/* Tooltip */}
                               <div className="absolute bottom-full mb-2 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-10">
-                                <div className="bg-gray-900 text-white text-xs rounded-lg py-2 px-3 whitespace-nowrap">
+                                <div className="bg-zinc-900 text-white text-xs rounded-lg py-2 px-3 whitespace-nowrap">
                                   <div className="font-bold">Rp {day.total.toLocaleString('id-ID')}</div>
-                                  <div className="text-gray-300">{day.count} orders</div>
-                                  <div className="text-gray-400">
+                                  <div className="text-zinc-300">{day.count} orders</div>
+                                  <div className="text-zinc-400">
                                     {new Date(day._id).toLocaleDateString('id-ID', { 
                                       day: 'numeric',
                                       month: 'short',
@@ -663,14 +663,14 @@ const [filterStatus, setFilterStatus] = useState('All');
                               {/* Bar */}
                               <div className="w-full flex items-end h-64">
                                 <div
-                                  className="w-full bg-gradient-to-t from-blue-500 via-blue-400 to-blue-300 rounded-t-md hover:from-blue-600 hover:via-blue-500 hover:to-blue-400 transition-all cursor-pointer shadow-sm"
+                                  className="w-full bg-gradient-to-t from-zinc-700 via-zinc-500 to-zinc-400 rounded-t-md hover:from-zinc-800 hover:via-zinc-600 hover:to-zinc-500 transition-all cursor-pointer shadow-sm"
                                   style={{ height: `${heightPercent}%`, minHeight: '8px' }}
                                 ></div>
                               </div>
                               
                               {/* X-Axis Label */}
                               <div className="mt-2 text-center">
-                                <div className="text-[10px] font-medium text-gray-600">
+                                <div className="text-[10px] font-medium text-zinc-600">
                                   {new Date(day._id).toLocaleDateString('id-ID', { 
                                     day: 'numeric',
                                     month: 'short'
@@ -681,11 +681,11 @@ const [filterStatus, setFilterStatus] = useState('All');
                           );
                         })}
                     </div>
-                    <div className="w-full h-px bg-gray-300 mt-1"></div>
+                    <div className="w-full h-px bg-zinc-300 mt-1"></div>
                   </div>
                 ) : (
-                  <div className="h-64 flex items-center justify-center bg-gray-50 rounded-lg">
-                    <div className="text-center text-gray-400">
+                  <div className="h-64 flex items-center justify-center bg-zinc-50 rounded-lg">
+                    <div className="text-center text-zinc-400">
                       <svg className="w-12 h-12 mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
                       </svg>
@@ -696,10 +696,10 @@ const [filterStatus, setFilterStatus] = useState('All');
               </div>
 
               {/* Monthly Revenue Chart */}
-              <div className="bg-white rounded-2xl shadow-md p-6">
+              <div className="bg-white rounded-xl shadow-md p-6">
                 <div className="mb-6">
-                  <h3 className="text-lg font-bold text-gray-800">Omset Bulanan</h3>
-                  <p className="text-sm text-gray-500">12 bulan terakhir</p>
+                  <h3 className="text-lg font-bold text-zinc-800">Omset Bulanan</h3>
+                  <p className="text-sm text-zinc-500">12 bulan terakhir</p>
                 </div>
 
                 {data?.analytics?.monthlyRevenue && data.analytics.monthlyRevenue.length > 0 ? (
@@ -713,10 +713,10 @@ const [filterStatus, setFilterStatus] = useState('All');
                           <div key={month._id} className="flex-1 flex flex-col items-center group relative">
                             {/* Tooltip */}
                             <div className="absolute bottom-full mb-2 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-10">
-                              <div className="bg-gray-900 text-white text-xs rounded-lg py-2 px-3 whitespace-nowrap">
+                              <div className="bg-zinc-900 text-white text-xs rounded-lg py-2 px-3 whitespace-nowrap">
                                 <div className="font-bold">Rp {month.total.toLocaleString('id-ID')}</div>
-                                <div className="text-gray-300">{month.count} orders</div>
-                                <div className="text-gray-400">
+                                <div className="text-zinc-300">{month.count} orders</div>
+                                <div className="text-zinc-400">
                                   {new Date(month._id + '-01').toLocaleDateString('id-ID', { 
                                     month: 'long',
                                     year: 'numeric'
@@ -735,7 +735,7 @@ const [filterStatus, setFilterStatus] = useState('All');
                             
                             {/* X-Axis Label */}
                             <div className="mt-2 text-center">
-                              <div className="text-[10px] font-medium text-gray-600">
+                              <div className="text-[10px] font-medium text-zinc-600">
                                 {new Date(month._id + '-01').toLocaleDateString('id-ID', { 
                                   month: 'short',
                                   year: '2-digit'
@@ -746,11 +746,11 @@ const [filterStatus, setFilterStatus] = useState('All');
                         );
                       })}
                     </div>
-                    <div className="w-full h-px bg-gray-300 mt-1"></div>
+                    <div className="w-full h-px bg-zinc-300 mt-1"></div>
                   </div>
                 ) : (
-                  <div className="h-64 flex items-center justify-center bg-gray-50 rounded-lg">
-                    <div className="text-center text-gray-400">
+                  <div className="h-64 flex items-center justify-center bg-zinc-50 rounded-lg">
+                    <div className="text-center text-zinc-400">
                       <svg className="w-12 h-12 mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
                       </svg>
@@ -764,8 +764,8 @@ const [filterStatus, setFilterStatus] = useState('All');
             {/* Status & Top Products Section */}
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
               {/* Order Status */}
-              <div className="bg-white rounded-2xl shadow-md p-6">
-                <h3 className="text-lg font-bold text-gray-800 mb-4">Status Pesanan</h3>
+              <div className="bg-white rounded-xl shadow-md p-6">
+                <h3 className="text-lg font-bold text-zinc-800 mb-4">Status Pesanan</h3>
                 
                 {data?.analytics?.statusSummary && data.analytics.statusSummary.length > 0 ? (
                   <div className="space-y-3">
@@ -796,49 +796,49 @@ const [filterStatus, setFilterStatus] = useState('All');
                             {status.count}
                           </span>
                         </div>
-                        <div className="text-xs text-gray-600 font-medium">
+                        <div className="text-xs text-zinc-600 font-medium">
                           Rp {status.total.toLocaleString('id-ID')}
                         </div>
                       </div>
                     ))}
                   </div>
                 ) : (
-                  <div className="h-40 flex items-center justify-center bg-gray-50 rounded-lg">
-                    <p className="text-sm text-gray-400">No data</p>
+                  <div className="h-40 flex items-center justify-center bg-zinc-50 rounded-lg">
+                    <p className="text-sm text-zinc-400">No data</p>
                   </div>
                 )}
               </div>
 
               {/* Top Products - Placeholder */}
-              <div className="lg:col-span-2 bg-white rounded-2xl shadow-md p-6">
-                <h3 className="text-lg font-bold text-gray-800 mb-4">Top 5 Produk Terlaris</h3>
+              <div className="lg:col-span-2 bg-white rounded-xl shadow-md p-6">
+                <h3 className="text-lg font-bold text-zinc-800 mb-4">Top 5 Produk Terlaris</h3>
                 
                 <div className="space-y-3">
                   {[1, 2, 3, 4, 5].map((rank) => (
-                    <div key={rank} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition">
+                    <div key={rank} className="flex items-center justify-between p-3 bg-zinc-50 rounded-lg hover:bg-zinc-100 transition">
                       <div className="flex items-center space-x-3">
                         <div className={`w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm ${
                           rank === 1 ? 'bg-yellow-400 text-yellow-900' :
-                          rank === 2 ? 'bg-gray-300 text-gray-800' :
+                          rank === 2 ? 'bg-zinc-300 text-zinc-800' :
                           rank === 3 ? 'bg-orange-300 text-orange-900' :
-                          'bg-gray-200 text-gray-700'
+                          'bg-zinc-200 text-zinc-700'
                         }`}>
                           {rank}
                         </div>
                         <div>
-                          <p className="text-sm font-semibold text-gray-800">Product Name {rank}</p>
-                          <p className="text-xs text-gray-500">XX orders</p>
+                          <p className="text-sm font-semibold text-zinc-800">Product Name {rank}</p>
+                          <p className="text-xs text-zinc-500">XX orders</p>
                         </div>
                       </div>
                       <div className="text-right">
-                        <p className="text-sm font-bold text-gray-800">Rp XXX.XXX</p>
-                        <p className="text-xs text-gray-500">revenue</p>
+                        <p className="text-sm font-bold text-zinc-800">Rp XXX.XXX</p>
+                        <p className="text-xs text-zinc-500">revenue</p>
                       </div>
                     </div>
                   ))}
                 </div>
                 
-                <p className="text-xs text-gray-400 text-center mt-4">
+                <p className="text-xs text-zinc-400 text-center mt-4">
                   * Fitur coming soon - perlu aggregasi data dari cart
                 </p>
               </div>

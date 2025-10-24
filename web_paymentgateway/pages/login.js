@@ -67,7 +67,7 @@ export default function Login() {
 
       localStorage.setItem('user', JSON.stringify(data.user));
       alert('Login berhasil!');
-      router.push('/');
+      router.push('/select-items');
     } catch (err) {
       setError(err.message);
     } finally {
@@ -76,71 +76,87 @@ export default function Login() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-50 to-pink-100 flex items-center justify-center p-4">
-      <div className="bg-white rounded-2xl shadow-xl p-8 w-full max-w-md">
+    <div className="min-h-screen bg-[#F5F5DD] flex items-center justify-center p-4">
+      <div className="bg-white rounded-2xl shadow-xl p-8 w-full max-w-md border-2 border-zinc-200">
         {step === 1 ? (
           <>
-            <h1 className="text-3xl font-bold text-gray-800 mb-2">Login</h1>
-            <p className="text-gray-600 mb-6">Masuk ke akun Anda</p>
+            <div className="text-center mb-6">
+              <div className="inline-flex items-center justify-center w-16 h-16 bg-zinc-800 rounded-full mb-4">
+                <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                </svg>
+              </div>
+              <h1 className="text-3xl font-bold text-zinc-800 mb-2">Login</h1>
+              <p className="text-zinc-600">Masuk ke akun Anda</p>
+            </div>
 
             {error && (
-              <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg mb-4">
+              <div className="bg-red-50 border-2 border-red-200 text-red-700 px-4 py-3 rounded-lg mb-4">
                 {error}
               </div>
             )}
 
-            <div className="space-y-4">
+            <form onSubmit={handleLogin} className="space-y-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium text-zinc-700 mb-2">
                   Email
                 </label>
                 <input
                   type="email"
                   value={formData.email}
                   onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg"
+                  className="w-full px-4 py-3 border-2 border-zinc-200 rounded-lg focus:ring-2 focus:ring-zinc-800 focus:border-transparent transition"
                   placeholder="john@example.com"
+                  required
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium text-zinc-700 mb-2">
                   Password
                 </label>
                 <input
                   type="password"
                   value={formData.password}
                   onChange={(e) => setFormData({ ...formData, password: e.target.value })}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg"
+                  className="w-full px-4 py-3 border-2 border-zinc-200 rounded-lg focus:ring-2 focus:ring-zinc-800 focus:border-transparent transition"
                   placeholder="Password"
+                  required
                 />
               </div>
 
               <button
-                onClick={handleLogin}
+                type="submit"
                 disabled={loading}
-                className="w-full bg-purple-600 text-white py-3 rounded-lg font-semibold hover:bg-purple-700 transition"
+                className="w-full bg-zinc-800 text-white py-3 rounded-full font-semibold hover:bg-zinc-700 transition shadow-md disabled:bg-zinc-400 disabled:cursor-not-allowed"
               >
                 {loading ? 'Loading...' : 'Login'}
               </button>
-            </div>
+            </form>
           </>
         ) : (
           <>
-            <h1 className="text-3xl font-bold text-gray-800 mb-2">Verifikasi MFA</h1>
-            <p className="text-gray-600 mb-6">
-              Masukkan kode 6 digit yang dikirim ke WhatsApp Anda
-            </p>
+            <div className="text-center mb-6">
+              <div className="inline-flex items-center justify-center w-16 h-16 bg-green-500 rounded-full mb-4">
+                <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+              </div>
+              <h1 className="text-3xl font-bold text-zinc-800 mb-2">Verifikasi MFA</h1>
+              <p className="text-zinc-600">
+                Masukkan kode 6 digit yang dikirim ke WhatsApp Anda
+              </p>
+            </div>
 
             {error && (
-              <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg mb-4">
+              <div className="bg-red-50 border-2 border-red-200 text-red-700 px-4 py-3 rounded-lg mb-4">
                 {error}
               </div>
             )}
 
-            <div className="space-y-4">
+            <form onSubmit={handleVerifyMFA} className="space-y-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium text-zinc-700 mb-2">
                   Kode Verifikasi
                 </label>
                 <input
@@ -148,34 +164,36 @@ export default function Login() {
                   maxLength={6}
                   value={formData.mfaCode}
                   onChange={(e) => setFormData({ ...formData, mfaCode: e.target.value })}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg text-center text-2xl tracking-widest"
+                  className="w-full px-4 py-3 border-2 border-zinc-200 rounded-lg text-center text-2xl tracking-widest font-bold focus:ring-2 focus:ring-zinc-800 focus:border-transparent transition"
                   placeholder="000000"
+                  required
                 />
               </div>
 
               <button
-                onClick={handleVerifyMFA}
+                type="submit"
                 disabled={loading}
-                className="w-full bg-purple-600 text-white py-3 rounded-lg font-semibold hover:bg-purple-700 transition"
+                className="w-full bg-zinc-800 text-white py-3 rounded-full font-semibold hover:bg-zinc-700 transition shadow-md disabled:bg-zinc-400 disabled:cursor-not-allowed"
               >
                 {loading ? 'Verifying...' : 'Verifikasi'}
               </button>
 
               <button
+                type="button"
                 onClick={() => setStep(1)}
-                className="w-full text-gray-600 hover:text-gray-800"
+                className="w-full text-zinc-600 hover:text-zinc-800 font-medium py-2 transition"
               >
-                Kembali
+                ← Kembali
               </button>
-            </div>
+            </form>
           </>
         )}
 
-        <p className="text-center text-gray-600 mt-6">
+        <p className="text-center text-zinc-600 mt-6">
           Belum punya akun?{' '}
           <button
             onClick={() => router.push('/register')}
-            className="text-purple-600 hover:underline font-medium"
+            className="text-zinc-800 hover:underline font-semibold"
           >
             Daftar di sini
           </button>
