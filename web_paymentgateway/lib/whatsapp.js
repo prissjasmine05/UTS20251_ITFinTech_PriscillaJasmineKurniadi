@@ -1,46 +1,107 @@
 // lib/whatsapp.js
 import twilio from 'twilio';
 
-const client = twilio(
-  process.env.TWILIO_ACCOUNT_SID,
-  process.env.TWILIO_AUTH_TOKEN
-);
+const client = twilio(process.env.TWILIO_ACCOUNT_SID, process.env.TWILIO_AUTH_TOKEN);
 
-// Format nomor ke E.164 untuk Twilio WhatsApp sandbox/production
-function normalizeToE164ID(phone) {
-  if (!phone) return '';
-  // buang karakter non-digit
-  let s = String(phone).replace(/[^\d]/g, '');
-  // 08xxxx -> 628xxxx
-  if (s.startsWith('0')) s = '62' + s.slice(1);
-  // pastikan ada prefix +
-  if (!s.startsWith('62')) s = '62' + s; // jaga-jaga kalau user isi "8123..."
-  return `whatsapp:+${s}`;
+// Ubah nomor ke "62xxxxxxxxxx" (tanpa plus)
+function toE16462(phone) {
+  if (!phone) return null;
+  let s = String(phone).trim();
+  if (s.startsWith('whatsapp:+')) s = s.slice('whatsapp:+'.length);
+  s = s.replace(/[^\d+]/g, '');
+  if (s.startsWith('+62')) s = '62' + s.slice(3);
+  else if (s.startsWith('0')) s = '62' + s.slice(1);
+  else if (!s.startsWith('62')) s = '62' + s;
+  return s;
 }
 
-/**
- * Kirim pesan WhatsApp teks biasa
- * toPhoneIntl: "62812xxxxxxxx"
- */
-export async function sendWhatsAppText(toPhoneIntl, message) {
-  const to = toPhoneIntl.startsWith('whatsapp:')
-    ? toPhoneIntl
-    : normalizeToE164ID(toPhoneIntl);
+// Format Twilio WA: "whatsapp:+62xxxx"
+function toWa(phone) {
+  const e164 = toE16462(phone);
+  return e164 ? `whatsapp:+${e164}` : null;
+}
 
-  const res = await client.messages.create({
-    from: process.env.TWILIO_WHATSAPP_FROM, // contoh: 'whatsapp:+14155238886'
-    to,
-    body: message,
+function buildFromParams(base = {}) {
+  if (process.env.TWILIO_MESSAGING_SERVICE_SID) {
+    return { messagingServiceSid: process.env.TWILIO_MESSAGING_SERVICE_SID, ...base };
+  }
+  if (process.env.TWILIO_WHATSAPP_FROM) {
+    return { from: process.env.TWILIO_WHATSAPP_FROM, ...base };
+  }
+  throw new Error('TWILIO_MESSAGING_SERVICE_SID atau TWILIO_WHATSAPP_FROM belum diset');
+}
+
+function logTwilioError(err) {
+  console.error('❌ Twilio WA error:', {
+    status: err?.status,
+    code: err?.code,
+    message: err?.message,
+    moreInfo: err?.moreInfo,
   });
-  return res;
 }
 
-/**
- * Wrapper agar login.js yang memanggil sendMFACode tetap jalan
- */
-export async function sendMFACode(toPhoneIntl, codePlain) {
-  const text =
-    `Kode OTP login kamu: ${codePlain}\n` +
-    `Berlaku 5 menit. Jangan bagikan ke siapa pun.`;
-  return sendWhatsAppText(toPhoneIntl, text);
+// === low level ===
+export async function sendTemplateMessage(to, contentSid, variables = {}, extra = {}) {
+  const toNumber = to?.startsWith('whatsapp:') ? to : toWa(to);
+  if (!toNumber) throw new Error('phone is required');
+  if (!contentSid) throw new Error('contentSid is required');
+
+  const payload = buildFromParams({
+    to: toNumber,
+    contentSid,
+    contentVariables: JSON.stringify(variables),
+    ...extra,
+  });
+
+  try {
+    const res = await client.messages.create(payload);
+    console.log('✅ Twilio template sent:', { to: toNumber, sid: res.sid });
+    return res;
+  } catch (err) {
+    logTwilioError(err);
+    throw err;
+  }
+}
+
+export async function sendTextMessage(to, body, extra = {}) {
+  const toNumber = to?.startsWith('whatsapp:') ? to : toWa(to);
+  if (!toNumber) throw new Error('phone is required');
+  if (!body) throw new Error('Text body is required');
+
+  const payload = buildFromParams({ to: toNumber, body, ...extra });
+
+  try {
+    const res = await client.messages.create(payload);
+    console.log('✅ Twilio text sent:', { to: toNumber, sid: res.sid });
+    return res;
+  } catch (err) {
+    logTwilioError(err);
+    throw err;
+  }
+}
+
+// === high level (yang dipakai login) ===
+export async function sendMFACode({ phone, code, expiresIn = 5, appName }) {
+  const name = appName || process.env.STORE_NAME || 'PrisJ App';
+  const contentSid = process.env.TWILIO_CONTENT_SID_MFA; // optional
+
+  if (contentSid) {
+    // sesuaikan key variabel dengan template-mu
+    return sendTemplateMessage(phone, contentSid, {
+      app_name: name,
+      code: String(code),
+      expires_minutes: String(expiresIn),
+    });
+  }
+
+  // fallback text
+  const body =
+    `Kode OTP ${name}: *${code}*\n` +
+    `Berlaku ${expiresIn} menit. Jangan bagikan ke siapa pun.`;
+  return sendTextMessage(phone, body);
+}
+
+// opsional dipakai di tempat lain
+export function normalizePhone62(phone) {
+  return toE16462(phone);
 }

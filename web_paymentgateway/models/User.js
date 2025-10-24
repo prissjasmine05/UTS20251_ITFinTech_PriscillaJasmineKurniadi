@@ -23,8 +23,11 @@ const UserSchema = new mongoose.Schema({
     type: Boolean,
     default: false,
   },
-  mfaCode: String,
-  mfaCodeExpiry: Date,
+  // contoh field yang relevan
+mfaCode: { type: String },
+mfaExpires: { type: Date },     // Date, bukan String
+mfaCodeExpiry: { type: Date },  // Date, bukan String
+
   createdAt: {
     type: Date,
     default: Date.now,
