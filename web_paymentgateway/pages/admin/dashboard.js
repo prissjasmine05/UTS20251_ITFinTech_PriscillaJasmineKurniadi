@@ -809,39 +809,6 @@ export default function AdminDashboard() {
                 )}
               </div>
 
-              {/* Top Products - Placeholder */}
-              <div className="lg:col-span-2 bg-white rounded-xl shadow-md p-6">
-                <h3 className="text-lg font-bold text-zinc-800 mb-4">Top 5 Produk Terlaris</h3>
-                
-                <div className="space-y-3">
-                  {[1, 2, 3, 4, 5].map((rank) => (
-                    <div key={rank} className="flex items-center justify-between p-3 bg-zinc-50 rounded-lg hover:bg-zinc-100 transition">
-                      <div className="flex items-center space-x-3">
-                        <div className={`w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm ${
-                          rank === 1 ? 'bg-yellow-400 text-yellow-900' :
-                          rank === 2 ? 'bg-zinc-300 text-zinc-800' :
-                          rank === 3 ? 'bg-orange-300 text-orange-900' :
-                          'bg-zinc-200 text-zinc-700'
-                        }`}>
-                          {rank}
-                        </div>
-                        <div>
-                          <p className="text-sm font-semibold text-zinc-800">Product Name {rank}</p>
-                          <p className="text-xs text-zinc-500">XX orders</p>
-                        </div>
-                      </div>
-                      <div className="text-right">
-                        <p className="text-sm font-bold text-zinc-800">Rp XXX.XXX</p>
-                        <p className="text-xs text-zinc-500">revenue</p>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-                
-                <p className="text-xs text-zinc-400 text-center mt-4">
-                  * Fitur coming soon - perlu aggregasi data dari cart
-                </p>
-              </div>
             </div>
           </div>
         )}

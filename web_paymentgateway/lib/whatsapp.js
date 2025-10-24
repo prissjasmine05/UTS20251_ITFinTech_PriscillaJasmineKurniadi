@@ -105,3 +105,50 @@ export async function sendMFACode({ phone, code, expiresIn = 5, appName }) {
 export function normalizePhone62(phone) {
   return toE16462(phone);
 }
+
+// === generic helper sesuai permintaan ===
+export async function sendWhatsAppTemplate(to, templateSID, params = {}) {
+    // gunakan low-level yang sudah ada
+    return sendTemplateMessage(to, templateSID, params);
+  }
+  
+  // === high-level untuk PENDING & PAID ===
+  export async function sendPendingPaymentTemplate({
+    phone,
+    customer_name,
+    order_id,
+    amount,
+    order_date,
+    payment_link,
+    notes,
+  }) {
+    const sid = process.env.TWILIO_CONTENT_SID_PENDING;
+    if (!sid) throw new Error('TWILIO_CONTENT_SID_PENDING is not set');
+    // Sesuaikan key dgn variable di Content Template Twilio-mu
+    return sendWhatsAppTemplate(phone, sid, {
+      customer_name,
+      order_id,
+      amount,
+      order_date,
+      payment_link,
+      notes,
+    });
+  }
+  
+  export async function sendPaidPaymentTemplate({
+    phone,
+    customer_name,
+    order_id,
+    amount,
+    paid_at,
+  }) {
+    const sid = process.env.TWILIO_CONTENT_SID_PAID;
+    if (!sid) throw new Error('TWILIO_CONTENT_SID_PAID is not set');
+    return sendWhatsAppTemplate(phone, sid, {
+      customer_name,
+      order_id,
+      amount,
+      paid_at,
+    });
+  }
+  
